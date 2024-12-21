@@ -531,6 +531,14 @@ function Generator:trigger_provider_update(winid, section_nr, component_nr)
     self.provider_cache.short[winid][section_nr][component_nr] = nil
 end
 
+local function log(message)
+    local file, err = io.open("/tmp/log", "w")
+    file:write(message)
+    file:write("\n")
+    file:close()
+    return true
+end
+
 -- Generate statusline string from components table
 function Generator:generate(is_active, maxwidth)
     local components
@@ -540,7 +548,10 @@ function Generator:generate(is_active, maxwidth)
     self.component_hidden[winid] = {}
 
     if is_disabled(self) then
+        log("Disabled")
         return ''
+    else
+        log("NOT disabled")
     end
 
     -- If a condition for one of the conditional components is satisfied, use those components
